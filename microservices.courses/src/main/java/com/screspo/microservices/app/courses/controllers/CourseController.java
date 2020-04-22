@@ -3,8 +3,11 @@ package com.screspo.microservices.app.courses.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,7 +24,12 @@ import com.screspo.microservices.commons.exams.models.entity.Exam;
 public class CourseController extends CommonController<Course, CourseService> {
 	
 	@PutMapping("/id")
-	public ResponseEntity<?> edit(@RequestBody Course course, @PathVariable Long id) {
+	public ResponseEntity<?> edit(@Valid @RequestBody Course course, BindingResult result, @PathVariable Long id) {
+		
+		if(result.hasErrors()) {
+			return validate(result);
+		}
+		
 		Optional<Course> optional = this.service.findById(id);
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
