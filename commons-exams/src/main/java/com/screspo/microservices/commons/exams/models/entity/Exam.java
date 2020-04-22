@@ -19,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -27,13 +28,14 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name="exams")
-public class Exam {
+public class Exam{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@NotEmpty
+	@Size(min = 4, max = 30)
 	private String name;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -48,26 +50,26 @@ public class Exam {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Subject subject;
 	
-	public Exam() {
+	public Exam(){
 		this.questions = new ArrayList<>();
 	}
 	
 	@PrePersist
-	public void prePersist() {
+	public void prePersist(){
 		this.createAt = new Date();
 	}
 	
-	public void setQuestions(List<Question> questions) {
+	public void setQuestions(List<Question> questions){
 		this.questions.clear();
 		questions.forEach(this::addQuestion);
 	}
 	
-	public void addQuestion(Question question) {
+	public void addQuestion(Question question){
 		this.questions.add(question);
 		question.setExam(this);
 	}
 	
-	public void removeQuestion(Question question) {
+	public void removeQuestion(Question question){
 		this.questions.remove(question);
 		question.setExam(null);
 	}

@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.screspo.microservices.commons.services.CommonService;
 
 @RestController
-public class CommonController<E, S extends CommonService<E>> {
+public class CommonController<E, S extends CommonService<E>>{
 
 	@Autowired
 	protected S service;
@@ -30,8 +31,13 @@ public class CommonController<E, S extends CommonService<E>> {
 		return ResponseEntity.ok().body(service.findAll());
 	}
 	
+	@GetMapping("/page")
+	public ResponseEntity<?> list(Pageable pageable) {
+		return ResponseEntity.ok().body(service.findAll());
+	}
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> show(@PathVariable Long id) {
+	public ResponseEntity<?> show(@PathVariable Long id){
 		Optional<E> optional = service.findById(id);
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
@@ -40,7 +46,7 @@ public class CommonController<E, S extends CommonService<E>> {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> create(@Valid @RequestBody E entity, BindingResult result) {
+	public ResponseEntity<?> create(@Valid @RequestBody E entity, BindingResult result){
 		
 		if(result.hasErrors()) {
 			return validate(result);
@@ -51,12 +57,12 @@ public class CommonController<E, S extends CommonService<E>> {
 	}
 	
 	@DeleteMapping("/id")
-	public ResponseEntity<?> delete(@PathVariable Long id) {
+	public ResponseEntity<?> delete(@PathVariable Long id){
 		service.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
 	
-	protected ResponseEntity<?> validate(BindingResult result) {
+	protected ResponseEntity<?> validate(BindingResult result){
 		Map<String, Object> errors = new HashMap<>();
 		result.getFieldErrors().forEach(e -> {
 			errors.put(e.getField(), "Field " + e.getField() + " " + e.getDefaultMessage());

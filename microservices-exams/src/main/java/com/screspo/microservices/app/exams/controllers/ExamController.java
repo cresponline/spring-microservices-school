@@ -22,7 +22,7 @@ import com.screspo.microservices.commons.exams.models.entity.Exam;
 public class ExamController extends CommonController<Exam, ExamService> {
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> edit(@Valid @RequestBody Exam exam, BindingResult result, @PathVariable Long id) {
+	public ResponseEntity<?> edit(@Valid @RequestBody Exam exam, BindingResult result, @PathVariable Long id){
 		
 		if(result.hasErrors()) {
 			return validate(result);

@@ -21,7 +21,7 @@ import com.screspo.microservices.commons.controllers.CommonController;
 public class StudentController extends CommonController<Student, StudentService>{
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> edit(@Valid @RequestBody Student student, BindingResult result, @PathVariable Long id) {
+	public ResponseEntity<?> edit(@Valid @RequestBody Student student, BindingResult result, @PathVariable Long id){
 		
 		if(result.hasErrors()) {
 			return validate(result);
@@ -43,7 +43,7 @@ public class StudentController extends CommonController<Student, StudentService>
 	}
 	
 	@GetMapping("/filter/{param}")
-	public ResponseEntity<?> filter(@PathVariable String param) {
+	public ResponseEntity<?> filter(@PathVariable String param){
 		return ResponseEntity.ok(service.findByNameOrSurname(param));
 	}
 }

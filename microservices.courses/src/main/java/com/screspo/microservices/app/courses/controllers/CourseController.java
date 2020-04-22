@@ -24,7 +24,7 @@ import com.screspo.microservices.commons.exams.models.entity.Exam;
 public class CourseController extends CommonController<Course, CourseService> {
 	
 	@PutMapping("/id")
-	public ResponseEntity<?> edit(@Valid @RequestBody Course course, BindingResult result, @PathVariable Long id) {
+	public ResponseEntity<?> edit(@Valid @RequestBody Course course, BindingResult result, @PathVariable Long id){
 		
 		if(result.hasErrors()) {
 			return validate(result);
@@ -36,6 +36,7 @@ public class CourseController extends CommonController<Course, CourseService> {
 		}
 		Course dbCourse = optional.get();
 		dbCourse.setName(course.getName());
+		
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
 				.body(this.service.save(dbCourse));
@@ -43,7 +44,9 @@ public class CourseController extends CommonController<Course, CourseService> {
 	
 	@PutMapping("/{id}/assign-students")
 	public ResponseEntity<?> assignStudents(@RequestBody List<Student> students, @PathVariable Long id){
+		
 		Optional<Course> optional = this.service.findById(id);
+		
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -60,7 +63,9 @@ public class CourseController extends CommonController<Course, CourseService> {
 	
 	@PutMapping("/{id}/remove-student")
 	public ResponseEntity<?> removeStudent(@RequestBody Student student, @PathVariable Long id){
+		
 		Optional<Course> optional = this.service.findById(id);
+		
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -74,7 +79,8 @@ public class CourseController extends CommonController<Course, CourseService> {
 	}
 	
 	@GetMapping("/student/{id}")
-	public ResponseEntity<?> findByStudentId(@PathVariable Long id) {
+	public ResponseEntity<?> findByStudentId(@PathVariable Long id){
+		
 		Course course = service.findCourstByStudentId(id);
 		
 		return ResponseEntity.ok(course);
@@ -82,7 +88,9 @@ public class CourseController extends CommonController<Course, CourseService> {
 	
 	@PutMapping("/{id}/assign-exams")
 	public ResponseEntity<?> assignExamms(@RequestBody List<Exam> exams, @PathVariable Long id){
+		
 		Optional<Course> optional = this.service.findById(id);
+		
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -99,7 +107,9 @@ public class CourseController extends CommonController<Course, CourseService> {
 	
 	@PutMapping("/{id}/remove-exam")
 	public ResponseEntity<?> removeExam(@RequestBody Exam exam, @PathVariable Long id){
+		
 		Optional<Course> optional = this.service.findById(id);
+		
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
