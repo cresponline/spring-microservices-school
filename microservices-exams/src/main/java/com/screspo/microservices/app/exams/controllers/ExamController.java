@@ -44,6 +44,11 @@ public class ExamController extends CommonController<Exam, ExamService> {
 	public ResponseEntity<?> filter(@PathVariable String param) {
 		return ResponseEntity.ok(service.findByName(param));
 	}
+	
+	@GetMapping("/subjects")
+	public ResponseEntity<?> listSubjects() {
+		return ResponseEntity.ok(service.findAllSubjects());
+	}
 
 }
  

@@ -1,0 +1,23 @@
+insert into `subjects` (name, super_subject_id) values ('Algebra', 1);
+insert into `subjects` (name, super_subject_id) values ('Aritmética', 1);
+insert into `subjects` (name, super_subject_id) values ('Trigonometría', 1);
+
+insert into `subjects` (name, super_subject_id) values ('Comprensión Lectora', 2);
+insert into `subjects` (name, super_subject_id) values ('Verbos', 2);
+insert into `subjects` (name, super_subject_id) values ('Gramática', 2);
+
+insert into `subjects` (name, super_subject_id) values ('Comprensión Lectora', 3);
+insert into `subjects` (name, super_subject_id) values ('Verbos', 3);
+insert into `subjects` (name, super_subject_id) values ('Gramática', 3);
+
+insert into `subjects` (name, super_subject_id) values ('Ciencias Naturales', 4);
+insert into `subjects` (name, super_subject_id) values ('Biología', 4);
+insert into `subjects` (name, super_subject_id) values ('Física y Química', 4);
+
+insert into `subjects` (name, super_subject_id) values ('Historia', 5);
+insert into `subjects` (name, super_subject_id) values ('Sociales', 5);
+
+
+insert into `subjects` (name, super_subject_id) values ('Música', 6);
+insert into `subjects` (name, super_subject_id) values ('Arte', 7);
+
