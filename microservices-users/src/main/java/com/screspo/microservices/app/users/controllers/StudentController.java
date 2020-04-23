@@ -5,7 +5,10 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,72 +25,84 @@ import com.screspo.microservices.app.users.services.StudentService;
 import com.screspo.microservices.commons.controllers.CommonController;
 
 @RestController
-public class StudentController extends CommonController<Student, StudentService>{
-	
+public class StudentController extends CommonController<Student, StudentService> {
+
 	@PutMapping("/{id}")
-	public ResponseEntity<?> edit(@Valid @RequestBody Student student, BindingResult result, @PathVariable Long id){
-		
-		if(result.hasErrors()) {
+	public ResponseEntity<?> edit(@Valid @RequestBody Student student, BindingResult result, @PathVariable Long id) {
+
+		if (result.hasErrors()) {
 			return validate(result);
 		}
-		
+
 		Optional<Student> optional = service.findById(id);
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		
+
 		Student studentDb = optional.get();
 		studentDb.setName(student.getName());
 		studentDb.setSurname(student.getSurname());
 		studentDb.setMail(student.getMail());
-		
-		return ResponseEntity
-				.status(HttpStatus.CREATED)
-				.body(service.save(studentDb));
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(studentDb));
 	}
-	
+
 	@GetMapping("/filter/{param}")
-	public ResponseEntity<?> filter(@PathVariable String param){
+	public ResponseEntity<?> filter(@PathVariable String param) {
 		return ResponseEntity.ok(service.findByNameOrSurname(param));
 	}
 
 	@PostMapping("create-with-photo")
 	public ResponseEntity<?> createWithPhoto(@Valid Student student, BindingResult result,
 			@RequestParam MultipartFile file) throws IOException {
-	
+
 		if (!file.isEmpty()) {
 			student.setPhoto(file.getBytes());
 		}
-		
+
 		return super.create(student, result);
 	}
-	
+
 	@PutMapping("/edit-with-photo/{id}")
-	public ResponseEntity<?> editWithPhoto(@Valid Student student, 
-			BindingResult result, @PathVariable Long id, @RequestParam MultipartFile file) throws IOException{
-		
-		if(result.hasErrors()) {
+	public ResponseEntity<?> editWithPhoto(@Valid Student student, BindingResult result, @PathVariable Long id,
+			@RequestParam MultipartFile file) throws IOException {
+
+		if (result.hasErrors()) {
 			return validate(result);
 		}
-		
+
 		Optional<Student> optional = service.findById(id);
 		if (!optional.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		
+
 		Student studentDb = optional.get();
 		studentDb.setName(student.getName());
 		studentDb.setSurname(student.getSurname());
 		studentDb.setMail(student.getMail());
-		
+
 		if (!file.isEmpty()) {
 			studentDb.setPhoto(file.getBytes());
 		}
-		
-		return ResponseEntity
-				.status(HttpStatus.CREATED)
-				.body(service.save(studentDb));
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(studentDb));
 	}
-	
-	
+
+	@GetMapping("/uploads/img/{id}")
+	public ResponseEntity<?> showPhoto(@PathVariable Long id) {
+
+		Optional<Student> optional = service.findById(id);
+
+		if (!optional.isPresent() || optional.get().getPhoto() == null) {
+			return ResponseEntity.notFound().build();
+		}
+
+		Resource img = new ByteArrayResource(optional.get().getPhoto());
+
+		return ResponseEntity.ok()
+				.contentType(MediaType.IMAGE_JPEG)
+				.body(img);
+
+	}
+
 }
