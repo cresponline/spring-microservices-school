@@ -7,12 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -39,10 +42,17 @@ public class Student {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createAt;
 
+	@Lob
+	@JsonIgnore
+	private byte[] photo;
 	
 	@PrePersist
 	public void prePersist() {
 		this.createAt = new Date();
+	}
+	
+	public Integer getPhotoHashCode() {
+		return (this.photo != null) ? this.photo.hashCode() : null;
 	}
 
 }

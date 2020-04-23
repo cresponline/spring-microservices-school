@@ -31,9 +31,9 @@ public class CommonController<E, S extends CommonService<E>>{
 		return ResponseEntity.ok().body(service.findAll());
 	}
 	
-	@GetMapping("/page")
+	@GetMapping("/pageable")
 	public ResponseEntity<?> list(Pageable pageable) {
-		return ResponseEntity.ok().body(service.findAll());
+		return ResponseEntity.ok().body(service.findAll(pageable));
 	}
 	
 	@GetMapping("/{id}")
