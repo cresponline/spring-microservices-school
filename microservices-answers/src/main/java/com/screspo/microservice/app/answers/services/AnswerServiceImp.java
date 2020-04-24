@@ -19,4 +19,16 @@ public class AnswerServiceImp implements AnswerService{
 		return repository.saveAll(answers);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public Iterable<Answer> findAnswerByStudentByExam(Long studentId, Long examId) {
+		return repository.findAnswerByStudentByExam(studentId, examId);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Iterable<Long> findExamsIdsWithAnswersByStudent(Long studentid) {
+		return repository.findExamsIdsWithAnswersByStudent(studentid);
+	}
+
 }
