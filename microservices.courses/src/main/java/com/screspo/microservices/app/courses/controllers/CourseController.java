@@ -2,6 +2,7 @@ package com.screspo.microservices.app.courses.controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -82,6 +83,19 @@ public class CourseController extends CommonController<Course, CourseService> {
 	public ResponseEntity<?> findByStudentId(@PathVariable Long id){
 		
 		Course course = service.findCourstByStudentId(id);
+		
+		if (course != null) {
+			List<Long> examsIds = (List<Long>) service.findExamsIdsWithAnswersByStudent(id);
+			
+			List<Exam> exams = course.getExams().stream().map(exam -> {
+				if (examsIds.contains(exam.getId())) {
+					exam.setAnswered(true);
+				}
+				return exam;
+			}).collect(Collectors.toList());
+			
+			course.setExams(exams);
+		}
 		
 		return ResponseEntity.ok(course);
 	}

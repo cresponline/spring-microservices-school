@@ -7,6 +7,8 @@ import com.screspo.microservices.commons.services.CommonService;
 
 @Service
 public interface CourseService extends CommonService<Course> {
+	
 	public Course findCourstByStudentId(Long id);
 	
+	public Iterable<Long> findExamsIdsWithAnswersByStudent(Long studentId);
 }
